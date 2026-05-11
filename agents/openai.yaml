@@ -1,0 +1,4 @@
+interface:
+  display_name: "SceneMakerAI"
+  short_description: "Generate one equirectangular panorama and preview it in Pannellum."
+  default_prompt: "Create one 2:1 equirectangular panorama from this image and provide a local Pannellum preview URL."
