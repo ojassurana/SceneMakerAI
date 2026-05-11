@@ -1,23 +1,37 @@
 # SceneMakerAI
 
-Turn any 2D image into a world you can look around in.
+**Turn any 2D image into a world you can look around in.**
 
-SceneMakerAI lets you give Codex an image, describe how you want the world to feel, and get back an interactive 360 preview. Start with a skyline, room, street, product shot, or concept frame. Then keep iterating: add airships, change the lighting, make the material pink marble, crowd the background, or push the scene in a new direction.
+Give Codex an image, describe how you want the world to feel, and get back an **interactive 360 preview**.
 
-No 3D modeling. No scene setup. Just image in, world out, preview live.
+Start with a skyline, room, street, product shot, or concept frame. Then keep iterating: add airships, change the lighting, make a lake pink, crowd the background, or push the scene somewhere new.
+
+**No 3D modeling. No scene setup. Just image in, world out, preview live.**
 
 ## Examples
 
-Prompt given to Codex for the first example:
-
-```text
-Make a 3D world for this image. Add 2 big ufos in the appropriate places.
-```
-
 <table>
   <tr>
-    <td width="50%"><img src="./assets/example-input.png" alt="Desert mesa input image"></td>
-    <td width="50%"><img src="./assets/example-2-input.jpg" alt="Moraine Lake input image"></td>
+    <th width="50%">Desert Mesa</th>
+    <th width="50%">Moraine Lake</th>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="./assets/example-input.png" alt="Desert mesa input image">
+    </td>
+    <td width="50%">
+      <img src="./assets/example-2-input.jpg" alt="Moraine Lake input image">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <strong>Prompt</strong><br>
+      <code>Make a 3D world for this image. Add 2 big ufos in the appropriate places.</code>
+    </td>
+    <td width="50%">
+      <strong>Prompt</strong><br>
+      <code>Make a 3D world for this image: [Image #1]. Make it a pink lake instead.</code>
+    </td>
   </tr>
   <tr>
     <td width="50%"><img src="./assets/example-demo.gif" alt="SceneMakerAI desert world preview"></td>
