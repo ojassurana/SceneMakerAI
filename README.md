@@ -1,6 +1,8 @@
 # SceneMakerAI
 
-[![skills.sh](https://skills.sh/b/ojassurana/SceneMakerAI)](https://skills.sh/ojassurana/SceneMakerAI)
+[![Agent Skill](https://img.shields.io/badge/Agent%20Skill-SKILL.md-black)](https://github.com/topics/agent-skills)
+[![Codex](https://img.shields.io/badge/Built%20for-Codex-111111)](https://github.com/topics/codex-skills)
+[![Install with skills](https://img.shields.io/badge/install%20with-skills.sh-000000)](https://skills.sh)
 
 **Turn any 2D image into a world you can look around in.**
 
