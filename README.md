@@ -8,17 +8,19 @@ No 3D modeling. No scene setup. Just image in, world out, preview live.
 
 ## Example
 
-<!-- Replace this with the input image. -->
-![Input image placeholder](./assets/input-placeholder.png)
+Input image:
+
+![Desert mesa input image](./assets/example-input.png)
 
 Prompt given to Codex:
 
 ```text
-Use SceneMakerAI for this image. Put a few helium airships around the skyline.
+Make a 3D world for this image. Add 2 big ufos in the appropriate places.
 ```
 
-<!-- Replace this with a GIF of the generated Pannellum preview. -->
-![SceneMakerAI preview GIF placeholder](./assets/demo-placeholder.gif)
+Output preview:
+
+![SceneMakerAI generated world preview](./assets/example-demo.gif)
 
 ## What It Does
 
