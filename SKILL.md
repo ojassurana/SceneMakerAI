@@ -65,6 +65,20 @@ Apply optional scene instructions only to generated/outpainted regions. Treat th
    - If the port is busy, use another available port.
    - Return the final panorama path and the localhost Pannellum viewer URL.
 
+## Edit Loop
+
+When the user asks for changes after seeing a preview:
+
+1. Use the latest final equirectangular panorama as the edit source.
+2. Use an image editing tool, not a fresh source-image-to-panorama generation, unless the requested change requires starting over.
+3. Preserve the `2:1` equirectangular format, camera position, horizon continuity, and seamless left/right wrapping.
+4. Apply the user's requested change while preserving unrelated scene content.
+5. Save the edited result as the new final panorama image.
+6. Re-run `scripts/create_pannellum_viewer.py <edited-panorama-path> --out-dir <viewer-dir>`.
+7. Return the edited panorama path and the refreshed localhost Pannellum URL.
+
+If the edit request would break the fixed-position panorama assumption or requires factual unseen details, state the limitation and make only a plausible visual edit.
+
 ## Output Rules
 
 - Always return the final `2:1` equirectangular panorama image path.

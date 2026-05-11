@@ -24,6 +24,16 @@ Use this only when no mask-capable editing tool is available, and tell the user 
 Using the attached image as the source front-view reference, create one single 2:1 equirectangular 360 panorama. Preserve the visible source scene as closely as possible. Extend the scene naturally to the left, right, behind, above, and below as if standing in one fixed spot. Apply any optional user scene instruction only to the newly invented surrounding areas. Make it suitable for a fixed-position panorama viewer with seamless left/right wrapping. Output one wide panorama only, not a collage, not a cubemap, and not six images.
 ```
 
+## Panorama Edit Prompt
+
+Use this after the user has already previewed a panorama and asks for an edit.
+
+```text
+Edit this existing 2:1 equirectangular 360 panorama according to this request: "{edit_request}"
+
+Preserve the equirectangular projection, 2:1 aspect ratio, fixed camera position, horizon continuity, and seamless left/right wrapping. Keep unrelated scene content unchanged. Output one edited wide panorama image only. No text, watermark, frame, UI, collage, cubemap, or multiple panels.
+```
+
 ## Scene Detail Checklist
 
 - Location type: cafe, plaza, office, room, street, corridor, landscape.
