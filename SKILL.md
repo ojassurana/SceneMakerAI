@@ -18,6 +18,33 @@ source image
 
 The primary generated artifact is strictly one `2:1` equirectangular panorama image. Do not create cubemap faces.
 
+## Completion Contract
+
+Never stop after the image generation tool returns. The task is incomplete until the generated panorama has been copied into this repo, a local Pannellum viewer has been created, a localhost server is running or reused, and the final response includes the localhost preview URL.
+
+The stable output location is:
+
+```text
+/Users/ojassurana/Desktop/SceneMaker/outputs/scenemakerai/<run-id>/panorama.png
+```
+
+An image path under `.codex/generated_images/...` is only a temporary image-tool cache location. It is not the final SceneMakerAI artifact.
+
+For every completed run:
+
+1. Copy the accepted generated image to `<run-dir>/panorama.png`.
+2. Create the viewer in `<run-dir>/viewer/`.
+3. Start or reuse a local static server for `<run-dir>/viewer/`.
+4. Return both `<run-dir>/panorama.png` and the localhost Pannellum URL.
+
+A response containing only "Generated Image" or only a `.codex/generated_images/...` path is incomplete.
+
+## Generated Image Tool Handling
+
+When an image generation tool returns a file under `.codex/generated_images/...`, locate that file and copy it into the active run directory as `<run-dir>/panorama.png` before continuing. Use the repo-local copy for validation, Pannellum viewer creation, edit loops, and final reporting.
+
+Do not treat the image-generation cache path as durable output. If the image tool only reports a `file://` URL, convert it to the local filesystem path before copying.
+
 ## Inputs
 
 - Required: one source image.
@@ -85,7 +112,7 @@ If the edit request would break the fixed-position panorama assumption or requir
 
 ## Output Rules
 
-- Always return the final `2:1` equirectangular panorama image path.
+- Always return the final repo-local `2:1` equirectangular panorama image path under `outputs/scenemakerai/<run-id>/panorama.png`.
 - Always return the local Pannellum preview URL.
 - Keep only the accepted final panorama image, the active `viewer/` folder needed for the preview URL, and any user-requested saved variants.
 - Delete temporary prep artifacts after the initial panorama is accepted: `canvas.png`, `mask.png`, `mask-alpha.png`, `preview.png`, and `metadata.json`.
