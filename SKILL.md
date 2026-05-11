@@ -20,12 +20,12 @@ The primary generated artifact is strictly one `2:1` equirectangular panorama im
 
 ## Completion Contract
 
-Never stop after the image generation tool returns. The task is incomplete until the generated panorama has been copied into this repo, a local Pannellum viewer has been created, a localhost server is running or reused, and the final response includes the localhost preview URL.
+Never stop after the image generation tool returns. The task is incomplete until the generated panorama has been copied into the agent's current working directory, a local Pannellum viewer has been created, a localhost server is running or reused, and the final response includes the localhost preview URL.
 
 The stable output location is:
 
 ```text
-/Users/ojassurana/Desktop/SceneMaker/outputs/scenemakerai/<run-id>/panorama.png
+<current-working-directory>/outputs/scenemakerai/<run-id>/panorama.png
 ```
 
 An image path under `.codex/generated_images/...` is only a temporary image-tool cache location. It is not the final SceneMakerAI artifact.
@@ -41,7 +41,7 @@ A response containing only "Generated Image" or only a `.codex/generated_images/
 
 ## Generated Image Tool Handling
 
-When an image generation tool returns a file under `.codex/generated_images/...`, locate that file and copy it into the active run directory as `<run-dir>/panorama.png` before continuing. Use the repo-local copy for validation, Pannellum viewer creation, edit loops, and final reporting.
+When an image generation tool returns a file under `.codex/generated_images/...`, locate that file and copy it into the active run directory as `<run-dir>/panorama.png` before continuing. Use the current-working-directory copy for validation, Pannellum viewer creation, edit loops, and final reporting.
 
 Do not treat the image-generation cache path as durable output. If the image tool only reports a `file://` URL, convert it to the local filesystem path before copying.
 
@@ -60,7 +60,7 @@ Use the source image as the starting visual reference, not an immutable region. 
    - If the image contains real people, avoid inventing close-up new views of them unless the user explicitly asks and the request is appropriate.
 
 2. Prepare a 2:1 panorama canvas and mask for local image files.
-   - Create one run directory, preferably `outputs/scenemakerai/<timestamp-or-short-id>/`.
+   - Create one run directory under the agent's current working directory, preferably `outputs/scenemakerai/<timestamp-or-short-id>/`.
    - Use `<run-dir>/prep/` for temporary canvas and mask files.
    - Run `scripts/prepare_pano_canvas.py <image> --out-dir <run-dir>/prep --width 2048 --height 1024` unless the user specifies another 2:1 size.
    - Use the generated `canvas.png`, `mask.png`, `mask-alpha.png`, `preview.png`, and `metadata.json`.
@@ -114,7 +114,7 @@ If the edit request would break the fixed-position panorama assumption or requir
 
 ## Output Rules
 
-- Always return the final repo-local `2:1` equirectangular panorama image path under `outputs/scenemakerai/<run-id>/panorama.png`.
+- Always return the final `2:1` equirectangular panorama image path under `<current-working-directory>/outputs/scenemakerai/<run-id>/panorama.png`.
 - Always return the local Pannellum preview URL.
 - Keep only the accepted final panorama image, the active `viewer/` folder needed for the preview URL, and any user-requested saved variants.
 - Delete temporary prep artifacts after the initial panorama is accepted: `canvas.png`, `mask.png`, `mask-alpha.png`, `preview.png`, and `metadata.json`.
