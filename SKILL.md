@@ -1,6 +1,6 @@
 ---
 name: scenemakerai
-description: Generate one 2:1 equirectangular panorama from one required source image, optionally applying user scene instructions only to hallucinated/outpainted regions, then automatically provide a lightweight local Pannellum visualization URL.
+description: Generate one 2:1 equirectangular panorama from one required source image, optionally applying user scene instructions across the panorama, then automatically provide a lightweight local Pannellum visualization URL.
 ---
 
 # SceneMakerAI
@@ -11,7 +11,7 @@ Turn one source image into one fixed-position 360-style panorama:
 
 ```text
 source image
--> protected front-view region on a 2:1 canvas
+-> front-view reference region on a 2:1 canvas
 -> mask-aware outpainting into one equirectangular panorama
 -> automatic Pannellum preview URL
 ```
@@ -50,42 +50,44 @@ Do not treat the image-generation cache path as durable output. If the image too
 - Required: one source image.
 - Optional: user scene instructions, such as "make the background more crowded with people."
 
-Apply optional scene instructions only to generated/outpainted regions. Treat the original source image area as immutable.
+Use the source image as the starting visual reference, not an immutable region. Optional scene instructions may affect the whole panorama, including the original-visible/front-view area, when that is the natural way to satisfy the request.
 
 ## Workflow
 
 1. Inspect the source image.
    - Identify whether it is landscape, portrait, fisheye/wide-angle, indoor, outdoor, or object-centric.
    - Identify anchors to preserve: architecture, people, foreground objects, lighting, ground plane, sky/ceiling, camera height, perspective, and left/right boundary cues.
-   - If the image contains real people, preserve visible identity and placement only in the original protected area. Do not invent close-up new views of them unless the user explicitly asks and the request is appropriate.
+   - If the image contains real people, avoid inventing close-up new views of them unless the user explicitly asks and the request is appropriate.
 
 2. Prepare a 2:1 panorama canvas and mask for local image files.
    - Create one run directory, preferably `outputs/scenemakerai/<timestamp-or-short-id>/`.
    - Use `<run-dir>/prep/` for temporary canvas and mask files.
    - Run `scripts/prepare_pano_canvas.py <image> --out-dir <run-dir>/prep --width 2048 --height 1024` unless the user specifies another 2:1 size.
    - Use the generated `canvas.png`, `mask.png`, `mask-alpha.png`, `preview.png`, and `metadata.json`.
-   - The default mask convention is `black=protected white=generate`.
-   - Use `mask-alpha.png` only when the active image tool expects transparent pixels to be generated and opaque pixels to be preserved.
+   - The default mask convention is `black=source reference white=generate`.
+   - Use masks to guide outpainting structure, not to enforce that the source region must remain unchanged.
+   - Use `mask-alpha.png` only when the active image tool expects transparent pixels to be generated and opaque pixels to be used as the source reference.
 
 3. Generate one equirectangular panorama.
    - Prefer an image editing/outpainting tool that accepts both an image and a mask.
    - Ask for one single `2:1` equirectangular panorama, not a collage and not six separate images.
-   - Preserve the source image area as the front-view region.
-   - Apply optional user scene instructions only to masked/generated regions.
+   - Use the source image area as the front-view reference region.
+   - Apply optional user scene instructions across the panorama where visually appropriate, including the front-view region if needed.
    - Extend missing left, right, back, up, and down views plausibly from the same fixed camera position.
    - Request seamless left/right wraparound.
    - Save or copy the accepted generated panorama to `<run-dir>/panorama.png`.
    - Read `references/prompting.md` for compact prompt templates.
 
 4. Handle tool limitations honestly.
-   - If the available image tool supports mask editing, use the mask and require exact preservation of the source region.
-   - If only a reference-style image generation tool is available, state that exact original-pixel preservation is not guaranteed.
+   - If the available image tool supports mask editing, use the mask for outpainting structure when helpful, but do not require exact preservation of the source region.
+   - If only a reference-style image generation tool is available, use the source image as the main visual reference.
+   - If a mask tool would prevent a requested change to the front-view/source region, generate the panorama from reference or edit the accepted panorama afterward so the requested change can affect that region.
    - Do not claim factual reconstruction of unseen areas. The missing scene content is generated.
 
 5. Verify the panorama.
    - Confirm the output is one image with width:height approximately `2:1`.
    - Confirm the front-view scene remains recognizable.
-   - Confirm optional instructions are reflected only in the generated surroundings.
+   - Confirm optional instructions are reflected in the panorama where visually appropriate.
    - Check whether the left and right edges can wrap without an obvious hard seam.
    - Regenerate or correct any non-2:1 output before finalizing.
    - After the final initial panorama is accepted and stored at `<run-dir>/panorama.png`, delete `<run-dir>/prep/` unless the user asks to keep intermediate files for debugging.

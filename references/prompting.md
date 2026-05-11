@@ -5,7 +5,7 @@ Use these prompts as starting points. Add concrete scene details only after insp
 ## Masked Outpainting Prompt
 
 ```text
-Create one single 2:1 equirectangular 360 panorama from this canvas. Preserve the original photo region exactly as the protected front-facing view. Fill only the masked/blank areas as the missing left, right, back, upward, and downward views from the same fixed camera position.
+Create one single 2:1 equirectangular 360 panorama from this canvas. Use the original photo region as the front-facing visual reference, but it does not need to remain pixel-identical if the user instruction requires a visual change. Fill the missing left, right, back, upward, and downward views from the same fixed camera position.
 
 Keep the same scene identity, architecture, lighting, weather, ground plane, ceiling or sky, camera height, and perspective. Make the panorama seamless at the left and right edges. Output one wide equirectangular panorama only. No text, watermark, frame, UI, collage, cubemap, or multiple panels.
 ```
@@ -13,15 +13,15 @@ Keep the same scene identity, architecture, lighting, weather, ground plane, cei
 ## Optional Scene Instruction Addendum
 
 ```text
-Apply this user instruction only to the generated/outpainted regions, not to the protected original photo region: "{user_instruction}"
+Apply this user instruction across the panorama where visually appropriate, including the original-visible/front-view region if needed: "{user_instruction}"
 ```
 
 ## Reference-Only Prompt
 
-Use this only when no mask-capable editing tool is available, and tell the user exact preservation is not guaranteed.
+Use this when no mask-capable editing tool is available or when the user instruction should affect the original-visible/front-view region.
 
 ```text
-Using the attached image as the source front-view reference, create one single 2:1 equirectangular 360 panorama. Preserve the visible source scene as closely as possible. Extend the scene naturally to the left, right, behind, above, and below as if standing in one fixed spot. Apply any optional user scene instruction only to the newly invented surrounding areas. Make it suitable for a fixed-position panorama viewer with seamless left/right wrapping. Output one wide panorama only, not a collage, not a cubemap, and not six images.
+Using the attached image as the source front-view reference, create one single 2:1 equirectangular 360 panorama. Use the visible source scene as the main visual basis. Extend the scene naturally to the left, right, behind, above, and below as if standing in one fixed spot. Apply any optional user scene instruction across the panorama where visually appropriate, including the original-visible/front-view region if needed. Make it suitable for a fixed-position panorama viewer with seamless left/right wrapping. Output one wide panorama only, not a collage, not a cubemap, and not six images.
 ```
 
 ## Panorama Edit Prompt
