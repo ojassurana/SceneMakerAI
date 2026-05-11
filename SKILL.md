@@ -65,7 +65,9 @@ If no image+text generation/editing tool is available, stop before generation an
 - Required: one source image.
 - Optional: user scene instructions, such as "make the background more crowded with people."
 
-Use the source image as the starting visual reference, not an immutable region. Optional scene instructions may affect the whole panorama, including the original-visible/front-view area, when that is the natural way to satisfy the request.
+Use the source image as the starting visual reference. By default, preserve the original-visible/front-view area as closely as the available tool allows. Optional scene instructions may affect that source area only when the user explicitly asks for a change that targets or necessarily alters it.
+
+If the user gives a broad instruction like "make a 3D world", "add objects around the skyline", "make the background crowded", or similar, apply the change to the generated surrounding panorama and keep the uploaded image area visually unchanged.
 
 ## Image Quality Default
 
@@ -90,15 +92,15 @@ The built-in image generation tool may not expose explicit quality or resolution
    - Run `scripts/prepare_pano_canvas.py <image> --out-dir <run-dir>/prep --width 2048 --height 1024` unless the user specifies another 2:1 size.
    - Use the generated `canvas.png`, `mask.png`, `mask-alpha.png`, `preview.png`, and `metadata.json`.
    - The default mask convention is `black=source reference white=generate`.
-   - Use masks to guide outpainting structure, not to enforce that the source region must remain unchanged.
+   - Use masks to guide outpainting structure and preserve the source region by default.
    - Use `mask-alpha.png` only when the active image tool expects transparent pixels to be generated and opaque pixels to be used as the source reference.
 
 3. Generate one equirectangular panorama.
    - Prefer an image editing/outpainting tool that accepts both an image and a mask.
    - At minimum, the tool must accept the source image plus text instructions.
    - Ask for one single `2:1` equirectangular panorama, not a collage and not six separate images.
-   - Use the source image area as the front-view reference region.
-   - Apply optional user scene instructions across the panorama where visually appropriate, including the front-view region if needed.
+   - Use the source image area as the front-view reference region and preserve it by default.
+   - Apply optional user scene instructions to generated surroundings unless the user explicitly asks to modify the original-visible/front-view area.
    - Extend missing left, right, back, up, and down views plausibly from the same fixed camera position.
    - Request seamless left/right wraparound.
    - Request sharp high-definition output using the Image Quality Default language.
@@ -106,15 +108,15 @@ The built-in image generation tool may not expose explicit quality or resolution
    - Read `references/prompting.md` for compact prompt templates.
 
 4. Handle tool limitations honestly.
-   - If the available image tool supports mask editing, use the mask for outpainting structure when helpful, but do not require exact preservation of the source region.
+   - If the available image tool supports mask editing, use the mask for outpainting structure and source-region preservation when the user has not requested a change to that source region.
    - If only a reference-style image generation tool is available, use the source image as the main visual reference.
    - If only an image-only tool is available, stop and explain that SceneMakerAI requires image+text generation/editing.
-   - If a mask tool would prevent a requested change to the front-view/source region, generate the panorama from reference or edit the accepted panorama afterward so the requested change can affect that region.
+   - If the user explicitly requests a change to the front-view/source region and a mask tool would prevent it, generate the panorama from reference or edit the accepted panorama afterward so the requested change can affect that region.
    - Do not claim factual reconstruction of unseen areas. The missing scene content is generated.
 
 5. Verify the panorama.
    - Confirm the output is one image with width:height approximately `2:1`.
-   - Confirm the front-view scene remains recognizable.
+   - Confirm the front-view scene remains visually unchanged unless the user explicitly requested a change to it.
    - Confirm optional instructions are reflected in the panorama where visually appropriate.
    - Confirm the image looks sharp enough for full-screen Pannellum viewing, with clear texture detail and no obvious blur, pixelation, compression artifacts, or painterly smearing.
    - Check whether the left and right edges can wrap without an obvious hard seam.
