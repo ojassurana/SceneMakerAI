@@ -33,7 +33,9 @@ Apply optional scene instructions only to generated/outpainted regions. Treat th
    - If the image contains real people, preserve visible identity and placement only in the original protected area. Do not invent close-up new views of them unless the user explicitly asks and the request is appropriate.
 
 2. Prepare a 2:1 panorama canvas and mask for local image files.
-   - Run `scripts/prepare_pano_canvas.py <image> --out-dir <work-dir> --width 2048 --height 1024` unless the user specifies another 2:1 size.
+   - Create one run directory, preferably `outputs/scenemakerai/<timestamp-or-short-id>/`.
+   - Use `<run-dir>/prep/` for temporary canvas and mask files.
+   - Run `scripts/prepare_pano_canvas.py <image> --out-dir <run-dir>/prep --width 2048 --height 1024` unless the user specifies another 2:1 size.
    - Use the generated `canvas.png`, `mask.png`, `mask-alpha.png`, `preview.png`, and `metadata.json`.
    - The default mask convention is `black=protected white=generate`.
    - Use `mask-alpha.png` only when the active image tool expects transparent pixels to be generated and opaque pixels to be preserved.
@@ -45,6 +47,7 @@ Apply optional scene instructions only to generated/outpainted regions. Treat th
    - Apply optional user scene instructions only to masked/generated regions.
    - Extend missing left, right, back, up, and down views plausibly from the same fixed camera position.
    - Request seamless left/right wraparound.
+   - Save or copy the accepted generated panorama to `<run-dir>/panorama.png`.
    - Read `references/prompting.md` for compact prompt templates.
 
 4. Handle tool limitations honestly.
@@ -58,9 +61,10 @@ Apply optional scene instructions only to generated/outpainted regions. Treat th
    - Confirm optional instructions are reflected only in the generated surroundings.
    - Check whether the left and right edges can wrap without an obvious hard seam.
    - Regenerate or correct any non-2:1 output before finalizing.
+   - After the final initial panorama is accepted and stored at `<run-dir>/panorama.png`, delete `<run-dir>/prep/` unless the user asks to keep intermediate files for debugging.
 
 6. Automatically create a local Pannellum preview.
-   - Run `scripts/create_pannellum_viewer.py <panorama-path> --out-dir <viewer-dir>`.
+   - Run `scripts/create_pannellum_viewer.py <run-dir>/panorama.png --out-dir <run-dir>/viewer`.
    - Start a local static server from that viewer directory, for example `python -m http.server 8000`.
    - If the port is busy, use another available port.
    - Return the final panorama path and the localhost Pannellum viewer URL.
@@ -73,8 +77,8 @@ When the user asks for changes after seeing a preview:
 2. Use an image editing tool, not a fresh source-image-to-panorama generation, unless the requested change requires starting over.
 3. Preserve the `2:1` equirectangular format, camera position, horizon continuity, and seamless left/right wrapping.
 4. Apply the user's requested change while preserving unrelated scene content.
-5. Save the edited result as the new final panorama image.
-6. Re-run `scripts/create_pannellum_viewer.py <edited-panorama-path> --out-dir <viewer-dir>`.
+5. Save the edited result as a new final panorama image in the same run directory, such as `<run-dir>/panorama-edit-01.png`.
+6. Re-run `scripts/create_pannellum_viewer.py <edited-panorama-path> --out-dir <run-dir>/viewer`, replacing the previous viewer image.
 7. Return the edited panorama path and the refreshed localhost Pannellum URL.
 
 If the edit request would break the fixed-position panorama assumption or requires factual unseen details, state the limitation and make only a plausible visual edit.
@@ -83,5 +87,7 @@ If the edit request would break the fixed-position panorama assumption or requir
 
 - Always return the final `2:1` equirectangular panorama image path.
 - Always return the local Pannellum preview URL.
+- Keep only the accepted final panorama image, the active `viewer/` folder needed for the preview URL, and any user-requested saved variants.
+- Delete temporary prep artifacts after the initial panorama is accepted: `canvas.png`, `mask.png`, `mask-alpha.png`, `preview.png`, and `metadata.json`.
 - Do not output cubemap faces.
 - Do not imply the result is a walkable 3D reconstruction. It is a fixed-point panorama.

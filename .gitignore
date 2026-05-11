@@ -1,5 +1,6 @@
 pano_prep/
 pannellum_viewer/
+outputs/
 *.pyc
 __pycache__/
 .DS_Store
