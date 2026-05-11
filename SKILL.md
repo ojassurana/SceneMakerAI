@@ -52,6 +52,12 @@ Do not treat the image-generation cache path as durable output. If the image too
 
 Use the source image as the starting visual reference, not an immutable region. Optional scene instructions may affect the whole panorama, including the original-visible/front-view area, when that is the natural way to satisfy the request.
 
+## Image Quality Default
+
+All generated and edited panoramas should be sharp, high-definition, and suitable for full-screen Pannellum viewing by default. Always include quality language in the image prompt: crisp details, clear distant objects, clean natural edges, high texture fidelity, no blur, no softness, no pixelation, no compression artifacts, and no painterly smearing.
+
+The built-in image generation tool may not expose explicit quality or resolution controls. Do not invent tool parameters. Enforce high-definition behavior through the prompt and reject or regenerate outputs that look soft, blurry, low-resolution, or artifacted.
+
 ## Workflow
 
 1. Inspect the source image.
@@ -75,6 +81,7 @@ Use the source image as the starting visual reference, not an immutable region. 
    - Apply optional user scene instructions across the panorama where visually appropriate, including the front-view region if needed.
    - Extend missing left, right, back, up, and down views plausibly from the same fixed camera position.
    - Request seamless left/right wraparound.
+   - Request sharp high-definition output using the Image Quality Default language.
    - Save or copy the accepted generated panorama to `<run-dir>/panorama.png`.
    - Read `references/prompting.md` for compact prompt templates.
 
@@ -88,8 +95,10 @@ Use the source image as the starting visual reference, not an immutable region. 
    - Confirm the output is one image with width:height approximately `2:1`.
    - Confirm the front-view scene remains recognizable.
    - Confirm optional instructions are reflected in the panorama where visually appropriate.
+   - Confirm the image looks sharp enough for full-screen Pannellum viewing, with clear texture detail and no obvious blur, pixelation, compression artifacts, or painterly smearing.
    - Check whether the left and right edges can wrap without an obvious hard seam.
    - Regenerate or correct any non-2:1 output before finalizing.
+   - Regenerate or edit any output that is visibly low-definition or soft.
    - After the final initial panorama is accepted and stored at `<run-dir>/panorama.png`, delete `<run-dir>/prep/` unless the user asks to keep intermediate files for debugging.
 
 6. Automatically create a local Pannellum preview.
@@ -106,7 +115,7 @@ When the user asks for changes after seeing a preview:
 1. Use the latest final equirectangular panorama as the edit source.
 2. Use an image editing tool, not a fresh source-image-to-panorama generation, unless the requested change requires starting over.
 3. Preserve the `2:1` equirectangular format, camera position, horizon continuity, and seamless left/right wrapping.
-4. Apply the user's requested change while preserving unrelated scene content.
+4. Apply the user's requested change while preserving unrelated scene content and the sharp high-definition quality standard.
 5. Save the edited result as a new final panorama image in the same run directory, such as `<run-dir>/panorama-edit-01.png`.
 6. Re-run `scripts/create_pannellum_viewer.py <edited-panorama-path> --out-dir <run-dir>/viewer`; it must create a content-hashed viewer image filename and a cache-busted URL.
 7. Return the edited panorama path and the new cache-busted localhost Pannellum URL. Do not reuse a bare `http://localhost:<port>/` URL after edits.
