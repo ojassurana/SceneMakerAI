@@ -45,6 +45,21 @@ When an image generation tool returns a file under `.codex/generated_images/...`
 
 Do not treat the image-generation cache path as durable output. If the image tool only reports a `file://` URL, convert it to the local filesystem path before copying.
 
+## Capability Gate
+
+SceneMakerAI requires an image generation or image editing tool that accepts both:
+
+- the source image
+- a text instruction describing the panorama and requested edits
+
+Preferred path: built-in `image_gen` when available.
+
+Acceptable fallback: any image generation/editing tool that can use an input image together with a text prompt.
+
+Unsupported fallback: an image-only tool that cannot receive text instructions. Do not silently use an image-only tool, because it cannot follow requests such as "add UFOs", "make the lake pink", "create a 2:1 equirectangular panorama", or "make it seamless."
+
+If no image+text generation/editing tool is available, stop before generation and explain that this environment cannot run SceneMakerAI's image creation step. Still allow deterministic local steps such as preparing the canvas/mask or creating a Pannellum viewer from an already existing panorama image.
+
 ## Inputs
 
 - Required: one source image.
@@ -59,6 +74,10 @@ All generated and edited panoramas should be sharp, high-definition, and suitabl
 The built-in image generation tool may not expose explicit quality or resolution controls. Do not invent tool parameters. Enforce high-definition behavior through the prompt and reject or regenerate outputs that look soft, blurry, low-resolution, or artifacted.
 
 ## Workflow
+
+0. Check image generation capability.
+   - Confirm there is an available image generation/editing tool that can receive the source image and the full text prompt.
+   - If only image-only generation is available, do not proceed with panorama generation. Explain the missing capability instead of producing a misleading result.
 
 1. Inspect the source image.
    - Identify whether it is landscape, portrait, fisheye/wide-angle, indoor, outdoor, or object-centric.
@@ -76,6 +95,7 @@ The built-in image generation tool may not expose explicit quality or resolution
 
 3. Generate one equirectangular panorama.
    - Prefer an image editing/outpainting tool that accepts both an image and a mask.
+   - At minimum, the tool must accept the source image plus text instructions.
    - Ask for one single `2:1` equirectangular panorama, not a collage and not six separate images.
    - Use the source image area as the front-view reference region.
    - Apply optional user scene instructions across the panorama where visually appropriate, including the front-view region if needed.
@@ -88,6 +108,7 @@ The built-in image generation tool may not expose explicit quality or resolution
 4. Handle tool limitations honestly.
    - If the available image tool supports mask editing, use the mask for outpainting structure when helpful, but do not require exact preservation of the source region.
    - If only a reference-style image generation tool is available, use the source image as the main visual reference.
+   - If only an image-only tool is available, stop and explain that SceneMakerAI requires image+text generation/editing.
    - If a mask tool would prevent a requested change to the front-view/source region, generate the panorama from reference or edit the accepted panorama afterward so the requested change can affect that region.
    - Do not claim factual reconstruction of unseen areas. The missing scene content is generated.
 
