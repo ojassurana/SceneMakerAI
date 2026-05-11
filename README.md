@@ -1,5 +1,7 @@
 # SceneMakerAI
 
+[![skills.sh](https://skills.sh/b/ojassurana/SceneMakerAI)](https://skills.sh/ojassurana/SceneMakerAI)
+
 **Turn any 2D image into a world you can look around in.**
 
 Give Codex an image, describe how you want the world to feel, and get back an **interactive 360 preview**.
@@ -10,46 +12,17 @@ Start with any scene. Then **ITERATE** with plain-English edits: add UFOs, turn 
 
 ## Install
 
-You need Node.js first. Node includes `npm` and `npx`.
+Method 1: ask your agent to install it.
 
-Check if you already have it:
-
-```bash
-node --version
-npx --version
+```text
+Install this skill:
+https://github.com/ojassurana/SceneMakerAI
 ```
 
-If those commands fail, install Node.js:
-
-- Download it from [nodejs.org](https://nodejs.org/)
-- Or install with Homebrew on macOS:
-
-```bash
-brew install node
-```
-
-Then install the skill. You do not need to install the `skills` CLI separately; `npx` will fetch and run it:
+Method 2: use the skills CLI with `npx`.
 
 ```bash
 npx skills add ojassurana/SceneMakerAI --skill scenemakerai
-```
-
-Install globally instead of project-local:
-
-```bash
-npx skills add ojassurana/SceneMakerAI --skill scenemakerai --global
-```
-
-Install for every detected agent:
-
-```bash
-npx skills add ojassurana/SceneMakerAI --skill scenemakerai --all
-```
-
-Check that the skill is visible:
-
-```bash
-npx skills list
 ```
 
 ## Examples
