@@ -1,27 +1,48 @@
 # SceneMakerAI
 
-SceneMakerAI is a Codex skill for turning one image into a single `2:1` equirectangular panorama and immediately previewing it in a local Pannellum viewer.
+Turn any 2D image into a world you can look around in.
+
+SceneMakerAI lets you give Codex an image, describe how you want the world to feel, and get back an interactive 360 preview. Start with a skyline, room, street, product shot, or concept frame. Then keep iterating: add airships, change the lighting, make the material pink marble, crowd the background, or push the scene in a new direction.
+
+No 3D modeling. No scene setup. Just image in, world out, preview live.
+
+## Example
+
+<!-- Replace this with the input image. -->
+![Input image placeholder](./assets/input-placeholder.png)
+
+Prompt given to Codex:
+
+```text
+Use SceneMakerAI for this image. Put a few helium airships around the skyline.
+```
+
+<!-- Replace this with a GIF of the generated Pannellum preview. -->
+![SceneMakerAI preview GIF placeholder](./assets/demo-placeholder.gif)
 
 ## What It Does
 
-- Takes one source image as the visual starting point.
-- Accepts optional scene instructions, such as adding objects, changing materials, or adjusting the scene.
-- Generates one wide `2:1` equirectangular panorama image.
-- Saves the final image under the agent's current working directory:
-
-```text
-outputs/scenemakerai/<run-id>/panorama.png
-```
-
-- Creates a lightweight Pannellum preview automatically.
-- Returns a cache-busted localhost preview URL so edits show up promptly.
-- Supports follow-up edits by editing the latest panorama and refreshing the preview URL.
+- Turns one image into an interactive 360-style world.
+- Lets you describe edits in plain language.
+- Supports follow-up iterations after the first preview.
+- Automatically hosts a local preview URL.
+- Refreshes the preview with cache-busted URLs so edits show up promptly.
 
 ## What It Does Not Do
 
 - It does not create walkable 3D geometry.
 - It does not output cubemap faces.
 - It does not treat generated unseen areas as factual reconstruction.
+
+## Technical Output
+
+SceneMakerAI generates one wide `2:1` equirectangular panorama image and previews it with Pannellum.
+
+The final image is saved under the agent's current working directory:
+
+```text
+outputs/scenemakerai/<run-id>/panorama.png
+```
 
 ## Skill Layout
 
