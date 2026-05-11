@@ -4,7 +4,7 @@
 
 Give Codex an image, describe how you want the world to feel, and get back an **interactive 360 preview**.
 
-Start with any scene. Then iterate with plain-English edits.
+Start with any scene. Then **ITERATE** with plain-English edits: add UFOs, turn a lake pink, or change the mood.
 
 **No 3D modeling. No scene setup. Just image in, world out, preview live.**
 
