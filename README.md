@@ -4,7 +4,7 @@
 
 Give Codex an image, describe how you want the world to feel, and get back an **interactive 360 preview**.
 
-Start with a skyline, room, street, product shot, or concept frame. Then keep iterating: add airships, change the lighting, make a lake pink, crowd the background, or push the scene somewhere new.
+Start with any scene. Then iterate with plain-English edits.
 
 **No 3D modeling. No scene setup. Just image in, world out, preview live.**
 
@@ -26,11 +26,11 @@ Start with a skyline, room, street, product shot, or concept frame. Then keep it
   <tr>
     <td width="50%">
       <strong>Prompt</strong><br>
-      <code>Make a 3D world for this image. Add 2 big ufos in the appropriate places.</code>
+      <code>Make a 3D world for this image. <strong>Add 2 big ufos in the appropriate places.</strong></code>
     </td>
     <td width="50%">
       <strong>Prompt</strong><br>
-      <code>Make a 3D world for this image: [Image #1]. Make it a pink lake instead.</code>
+      <code>Make a 3D world for this image: [Image #1]. <strong>Make it a pink lake instead.</strong></code>
     </td>
   </tr>
   <tr>
