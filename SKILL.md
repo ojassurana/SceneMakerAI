@@ -1,22 +1,24 @@
 ---
 name: scenemakerai
-description: Generate one 2:1 equirectangular panorama from one required source image, optionally applying user scene instructions across the panorama, then automatically provide a lightweight local Pannellum visualization URL.
+description: Generate one true spherical 360 equirectangular environment map from one required source image, optionally applying user scene instructions across the scene, then automatically provide a lightweight local Pannellum visualization URL.
 ---
 
 # SceneMakerAI
 
 ## Goal
 
-Turn one source image into one fixed-position 360-style panorama:
+Turn one source image into one fixed-position 360 world preview:
 
 ```text
 source image
 -> front-view reference region on a 2:1 canvas
--> mask-aware outpainting into one equirectangular panorama
+-> mask-aware outpainting into one spherical 360 equirectangular environment map
 -> automatic Pannellum preview URL
 ```
 
-The primary generated artifact is strictly one `2:1` equirectangular panorama image. Do not create cubemap faces.
+The primary generated artifact is strictly one `2:1` equirectangular environment-map image. This is a flat image file, but it must be authored as a spherical 360 texture that wraps inside a viewer sphere. Do not create cubemap faces.
+
+Do not accept a normal wide-angle landscape photo, flat scenic panorama, cinematic banner, cropped strip, collage, or multi-panel image as the final output. The image must include plausible left, right, back, up, and down coverage from the same fixed camera position so Pannellum feels like a spherical look-around world.
 
 ## Completion Contract
 
@@ -56,7 +58,7 @@ Preferred path: built-in `image_gen` when available.
 
 Acceptable fallback: any image generation/editing tool that can use an input image together with a text prompt.
 
-Unsupported fallback: an image-only tool that cannot receive text instructions. Do not silently use an image-only tool, because it cannot follow requests such as "add UFOs", "make the lake pink", "create a 2:1 equirectangular panorama", or "make it seamless."
+Unsupported fallback: an image-only tool that cannot receive text instructions. Do not silently use an image-only tool, because it cannot follow requests such as "add UFOs", "make the lake pink", "create a true spherical 360 equirectangular environment map", or "make it seamless."
 
 If no image+text generation/editing tool is available, stop before generation and explain that this environment cannot run SceneMakerAI's image creation step. Still allow deterministic local steps such as preparing the canvas/mask or creating a Pannellum viewer from an already existing panorama image.
 
@@ -71,7 +73,7 @@ If the user gives a broad instruction like "make a 3D world", "add objects aroun
 
 ## Image Quality Default
 
-All generated and edited panoramas should be sharp, high-definition, and suitable for full-screen Pannellum viewing by default. Always include quality language in the image prompt: crisp details, clear distant objects, clean natural edges, high texture fidelity, no blur, no softness, no pixelation, no compression artifacts, and no painterly smearing.
+All generated and edited spherical 360 environment maps should be sharp, high-definition, and suitable for full-screen Pannellum viewing by default. Always include quality language in the image prompt: crisp details, clear distant objects, clean natural edges, high texture fidelity, no blur, no softness, no pixelation, no compression artifacts, and no painterly smearing.
 
 The built-in image generation tool may not expose explicit quality or resolution controls. Do not invent tool parameters. Enforce high-definition behavior through the prompt and reject or regenerate outputs that look soft, blurry, low-resolution, or artifacted.
 
@@ -95,14 +97,15 @@ The built-in image generation tool may not expose explicit quality or resolution
    - Use masks to guide outpainting structure and preserve the source region by default.
    - Use `mask-alpha.png` only when the active image tool expects transparent pixels to be generated and opaque pixels to be used as the source reference.
 
-3. Generate one equirectangular panorama.
+3. Generate one spherical 360 equirectangular environment map.
    - Prefer an image editing/outpainting tool that accepts both an image and a mask.
    - At minimum, the tool must accept the source image plus text instructions.
-   - Ask for one single `2:1` equirectangular panorama, not a collage and not six separate images.
+   - Ask for one single true spherical `2:1` equirectangular environment map, not a normal flat panorama, not a cinematic banner, not a collage, and not six separate images.
    - Use the source image area as the front-view reference region and preserve it by default.
    - Apply optional user scene instructions to generated surroundings unless the user explicitly asks to modify the original-visible/front-view area.
-   - Extend missing left, right, back, up, and down views plausibly from the same fixed camera position.
+   - Extend missing left, right, back, up, and down views plausibly from the same fixed camera position so the result works when wrapped inside a sphere.
    - Request seamless left/right wraparound.
+   - Explicitly say the output must not look like a normal wide-angle landscape photo, flat scenic panorama, cropped scenic strip, or banner.
    - Request sharp high-definition output using the Image Quality Default language.
    - Save or copy the accepted generated panorama to `<run-dir>/panorama.png`.
    - Read `references/prompting.md` for compact prompt templates.
@@ -116,11 +119,14 @@ The built-in image generation tool may not expose explicit quality or resolution
 
 5. Verify the panorama.
    - Confirm the output is one image with width:height approximately `2:1`.
+   - Confirm the output reads as a true spherical 360 equirectangular environment map, not a normal flat wide photo, scenic strip, or banner.
    - Confirm the front-view scene remains visually unchanged unless the user explicitly requested a change to it.
    - Confirm optional instructions are reflected in the panorama where visually appropriate.
+   - Confirm there is plausible surrounding coverage for left, right, back, up, and down views from one fixed viewpoint.
    - Confirm the image looks sharp enough for full-screen Pannellum viewing, with clear texture detail and no obvious blur, pixelation, compression artifacts, or painterly smearing.
    - Check whether the left and right edges can wrap without an obvious hard seam.
    - Regenerate or correct any non-2:1 output before finalizing.
+   - Regenerate or correct any output that looks like a flat wide scenic panorama instead of a spherical environment texture.
    - Regenerate or edit any output that is visibly low-definition or soft.
    - After the final initial panorama is accepted and stored at `<run-dir>/panorama.png`, delete `<run-dir>/prep/` unless the user asks to keep intermediate files for debugging.
 
@@ -135,11 +141,11 @@ The built-in image generation tool may not expose explicit quality or resolution
 
 When the user asks for changes after seeing a preview:
 
-1. Use the latest final equirectangular panorama as the edit source.
+1. Use the latest final spherical equirectangular environment map as the edit source.
 2. Use an image editing tool, not a fresh source-image-to-panorama generation, unless the requested change requires starting over.
-3. Preserve the `2:1` equirectangular format, camera position, horizon continuity, and seamless left/right wrapping.
+3. Preserve the `2:1` spherical equirectangular environment-map format, camera position, horizon continuity, and seamless left/right wrapping.
 4. Apply the user's requested change while preserving unrelated scene content and the sharp high-definition quality standard.
-5. Save the edited result as a new final panorama image in the same run directory, such as `<run-dir>/panorama-edit-01.png`.
+5. Save the edited result as a new final environment-map image in the same run directory, such as `<run-dir>/panorama-edit-01.png`.
 6. Re-run `scripts/create_pannellum_viewer.py <edited-panorama-path> --out-dir <run-dir>/viewer`; it must create a content-hashed viewer image filename and a cache-busted URL.
 7. Return the edited panorama path and the new cache-busted localhost Pannellum URL. Do not reuse a bare `http://localhost:<port>/` URL after edits.
 
@@ -147,9 +153,9 @@ If the edit request would break the fixed-position panorama assumption or requir
 
 ## Output Rules
 
-- Always return the final `2:1` equirectangular panorama image path under `<current-working-directory>/outputs/scenemakerai/<run-id>/panorama.png`.
+- Always return the final `2:1` spherical equirectangular environment-map image path under `<current-working-directory>/outputs/scenemakerai/<run-id>/panorama.png`.
 - Always return the cache-busted local Pannellum preview URL printed by `scripts/create_pannellum_viewer.py`.
-- Keep only the accepted final panorama image, the active `viewer/` folder needed for the preview URL, and any user-requested saved variants.
+- Keep only the accepted final environment-map image, the active `viewer/` folder needed for the preview URL, and any user-requested saved variants.
 - Delete temporary prep artifacts after the initial panorama is accepted: `canvas.png`, `mask.png`, `mask-alpha.png`, `preview.png`, and `metadata.json`.
 - Do not output cubemap faces.
 - Do not imply the result is a walkable 3D reconstruction. It is a fixed-point panorama.

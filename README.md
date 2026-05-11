@@ -74,7 +74,7 @@ npx skills add ojassurana/SceneMakerAI --skill scenemakerai
 
 ## Technical Output
 
-SceneMakerAI generates one wide `2:1` equirectangular panorama image and previews it with Pannellum.
+SceneMakerAI generates one `2:1` spherical equirectangular environment-map image and previews it with Pannellum. It is still a flat image file, but it is authored to wrap inside a 360 viewer sphere, not to behave like a normal wide scenic banner.
 
 The final image is saved under the agent's current working directory:
 
