@@ -6,21 +6,24 @@ SceneMakerAI lets you give Codex an image, describe how you want the world to fe
 
 No 3D modeling. No scene setup. Just image in, world out, preview live.
 
-## Example
+## Examples
 
-Input image:
-
-![Desert mesa input image](./assets/example-input.png)
-
-Prompt given to Codex:
+Prompt given to Codex for the first example:
 
 ```text
 Make a 3D world for this image. Add 2 big ufos in the appropriate places.
 ```
 
-Output preview:
-
-![SceneMakerAI generated world preview](./assets/example-demo.gif)
+<table>
+  <tr>
+    <td width="50%"><img src="./assets/example-input.png" alt="Desert mesa input image"></td>
+    <td width="50%"><img src="./assets/example-2-input.jpg" alt="Moraine Lake input image"></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="./assets/example-demo.gif" alt="SceneMakerAI desert world preview"></td>
+    <td width="50%"><img src="./assets/example-2-demo.gif" alt="SceneMakerAI lake world preview"></td>
+  </tr>
+</table>
 
 ## What It Does
 
