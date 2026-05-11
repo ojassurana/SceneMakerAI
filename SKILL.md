@@ -35,7 +35,7 @@ For every completed run:
 1. Copy the accepted generated image to `<run-dir>/panorama.png`.
 2. Create the viewer in `<run-dir>/viewer/`.
 3. Start or reuse a local static server for `<run-dir>/viewer/`.
-4. Return both `<run-dir>/panorama.png` and the localhost Pannellum URL.
+4. Return both `<run-dir>/panorama.png` and the cache-busted localhost Pannellum URL printed by the viewer helper.
 
 A response containing only "Generated Image" or only a `.codex/generated_images/...` path is incomplete.
 
@@ -96,7 +96,7 @@ Use the source image as the starting visual reference, not an immutable region. 
    - Run `scripts/create_pannellum_viewer.py <run-dir>/panorama.png --out-dir <run-dir>/viewer`.
    - Start a local static server from that viewer directory, for example `python -m http.server 8000`.
    - If the port is busy, use another available port.
-   - Return the final panorama path and the localhost Pannellum viewer URL.
+   - Return the final panorama path and the cache-busted localhost Pannellum viewer URL printed by the script.
 
 ## Edit Loop
 
@@ -107,15 +107,15 @@ When the user asks for changes after seeing a preview:
 3. Preserve the `2:1` equirectangular format, camera position, horizon continuity, and seamless left/right wrapping.
 4. Apply the user's requested change while preserving unrelated scene content.
 5. Save the edited result as a new final panorama image in the same run directory, such as `<run-dir>/panorama-edit-01.png`.
-6. Re-run `scripts/create_pannellum_viewer.py <edited-panorama-path> --out-dir <run-dir>/viewer`, replacing the previous viewer image.
-7. Return the edited panorama path and the refreshed localhost Pannellum URL.
+6. Re-run `scripts/create_pannellum_viewer.py <edited-panorama-path> --out-dir <run-dir>/viewer`; it must create a content-hashed viewer image filename and a cache-busted URL.
+7. Return the edited panorama path and the new cache-busted localhost Pannellum URL. Do not reuse a bare `http://localhost:<port>/` URL after edits.
 
 If the edit request would break the fixed-position panorama assumption or requires factual unseen details, state the limitation and make only a plausible visual edit.
 
 ## Output Rules
 
 - Always return the final `2:1` equirectangular panorama image path under `<current-working-directory>/outputs/scenemakerai/<run-id>/panorama.png`.
-- Always return the local Pannellum preview URL.
+- Always return the cache-busted local Pannellum preview URL printed by `scripts/create_pannellum_viewer.py`.
 - Keep only the accepted final panorama image, the active `viewer/` folder needed for the preview URL, and any user-requested saved variants.
 - Delete temporary prep artifacts after the initial panorama is accepted: `canvas.png`, `mask.png`, `mask-alpha.png`, `preview.png`, and `metadata.json`.
 - Do not output cubemap faces.
