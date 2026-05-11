@@ -10,9 +10,31 @@ Start with any scene. Then **ITERATE** with plain-English edits: add UFOs, turn 
 
 ## Install
 
+You do not need to install the `skills` CLI first if you have Node.js installed. `npx` will fetch and run it for you:
+
 ```bash
 npx skills add ojassurana/SceneMakerAI --skill scenemakerai
 ```
+
+Install globally instead of project-local:
+
+```bash
+npx skills add ojassurana/SceneMakerAI --skill scenemakerai --global
+```
+
+Install for every detected agent:
+
+```bash
+npx skills add ojassurana/SceneMakerAI --skill scenemakerai --all
+```
+
+Check that the skill is visible:
+
+```bash
+npx skills list
+```
+
+If `npx` is not available, install Node.js first from [nodejs.org](https://nodejs.org/) or with your system package manager.
 
 ## Examples
 
