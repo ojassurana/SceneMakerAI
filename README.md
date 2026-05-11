@@ -30,7 +30,7 @@ Start with any scene. Then iterate with plain-English edits.
     </td>
     <td width="50%">
       <strong>Prompt</strong><br>
-      <code>Make a 3D world for this image: [Image #1]. <strong>Make it a pink lake instead.</strong></code>
+      <code>Make a 3D world for this image. <strong>Make it a pink lake instead.</strong></code>
     </td>
   </tr>
   <tr>
