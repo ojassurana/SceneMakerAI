@@ -1,7 +1,5 @@
 # SceneMakerAI
 
-[![skills.sh](https://skills.sh/b/ojassurana/SceneMakerAI)](https://skills.sh/ojassurana/SceneMakerAI)
-
 **Turn any 2D image into a world you can look around in.**
 
 Give Codex an image, describe how you want the world to feel, and get back an **interactive 360 preview**.
