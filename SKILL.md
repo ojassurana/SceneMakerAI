@@ -34,7 +34,7 @@ For every completed run:
 
 1. Copy the accepted generated image to `<run-dir>/panorama.png`.
 2. Create the viewer in `<run-dir>/viewer/`.
-3. Start or reuse a local static server for `<run-dir>/viewer/`.
+3. Reuse an existing local static server for `<run-dir>/viewer/` if one is already running; otherwise start one.
 4. Return both `<run-dir>/panorama.png` and the cache-busted localhost Pannellum URL printed by the viewer helper.
 
 A response containing only "Generated Image" or only a `.codex/generated_images/...` path is incomplete.
@@ -94,8 +94,9 @@ Use the source image as the starting visual reference, not an immutable region. 
 
 6. Automatically create a local Pannellum preview.
    - Run `scripts/create_pannellum_viewer.py <run-dir>/panorama.png --out-dir <run-dir>/viewer`.
-   - Start a local static server from that viewer directory, for example `python -m http.server 8000`.
-   - If the port is busy, use another available port.
+   - Before starting a server, check whether a localhost server is already serving `<run-dir>/viewer/`. If yes, reuse that server and port.
+   - Start a new static server from `<run-dir>/viewer/`, for example `python -m http.server 8000`, only when no suitable server is already running.
+   - If the preferred port is busy with an unrelated server, use another available port.
    - Return the final panorama path and the cache-busted localhost Pannellum viewer URL printed by the script.
 
 ## Edit Loop
